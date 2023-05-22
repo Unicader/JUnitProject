@@ -23,8 +23,8 @@ class CalculatorTest {
 		assertEquals(2, result);
 	}
 	
+	@Tag("subtract")
 	@DisplayName("1 - 1 = 0")
-    @Tag("subtract")
 	@Test
 	void oneMinusOneIsZero() {
 		double result = calculator.sub(1, 1);
