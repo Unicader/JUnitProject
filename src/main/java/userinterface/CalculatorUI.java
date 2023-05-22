@@ -6,12 +6,12 @@ import java.util.Scanner;
 import calculator.Calculator;
 
 public class CalculatorUI {
-	private final Scanner scanner;
+	final Scanner scanner;
 	private final Calculator calculator;
 
-	public CalculatorUI(Calculator calculator) {
+	public CalculatorUI() {
 		this.scanner = new Scanner(System.in);
-		this.calculator = calculator;
+		this.calculator = new Calculator();
 	}
 
 	public void runProgram() {
@@ -24,16 +24,16 @@ public class CalculatorUI {
 
 			switch (command) {
 			case "add":
-				performAddition();
+				displayResult(performAddition());
 				break;
 			case "sub":
-				performSubtraction();
+				displayResult(performSubtraction());
 				break;
 			case "mul":
-				performMultiplication();
+				displayResult(performMultiplication());
 				break;
 			case "div":
-				performDivision();
+				displayResult(performDivision());
 				break;
 			case "exit":
 				running = false;
@@ -47,36 +47,33 @@ public class CalculatorUI {
 		System.out.println("Calculator is now closed.");
 	}
 
-	void performAddition() {
+	BigDecimal performAddition() {
 		BigDecimal a = readNumber("Enter the first number: ");
 		BigDecimal b = readNumber("Enter the second number: ");
-		BigDecimal result = calculator.add(a, b);
-		displayResult(result);
+		return calculator.add(a, b);
 	}
 
-	void performSubtraction() {
+	
+	BigDecimal performSubtraction() {
 		BigDecimal a = readNumber("Enter the first number: ");
 		BigDecimal b = readNumber("Enter the second number: ");
-		BigDecimal result = calculator.sub(a, b);
-		displayResult(result);
+		return calculator.sub(a, b);
 	}
 
-	void performMultiplication() {
+	BigDecimal performMultiplication() {
 		BigDecimal a = readNumber("Enter the first number: ");
 		BigDecimal b = readNumber("Enter the second number: ");
-		BigDecimal result = calculator.mul(a, b);
-		displayResult(result);
+		return calculator.mul(a, b);
 	}
 
-	void performDivision() {
+	BigDecimal performDivision() {
 		BigDecimal dividend = readNumber("Enter the dividend: ");
 		BigDecimal divisor = readNumber("Enter the divisor: ");
 
 		try {
-			BigDecimal result = calculator.div(dividend, divisor);
-			displayResult(result);
+			return calculator.div(dividend, divisor);
 		} catch (IllegalArgumentException e) {
-			System.out.println(e.getMessage());
+			throw new IllegalArgumentException();
 		}
 	}
 
