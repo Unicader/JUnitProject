@@ -73,12 +73,11 @@ public class CalculatorUITest {
 		});
 	}
 	
-	@Disabled
 	@Test
 	public void testReadNumber() {
 		// Arrange
 		CalculatorUI calculatorUI = Mockito.spy(new CalculatorUI());
-		Mockito.doReturn(BigDecimal.ONE).when(calculatorUI).scanner.nextLine().trim();
+		Mockito.doReturn("1").when(calculatorUI).readInputLine();
 		//Act
 		BigDecimal readNumber = calculatorUI.readNumber("");
 		// Assert

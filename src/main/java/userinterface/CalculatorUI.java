@@ -6,11 +6,9 @@ import java.util.Scanner;
 import calculator.Calculator;
 
 public class CalculatorUI {
-	final Scanner scanner;
 	private final Calculator calculator;
 
 	public CalculatorUI() {
-		this.scanner = new Scanner(System.in);
 		this.calculator = new Calculator();
 	}
 
@@ -20,7 +18,7 @@ public class CalculatorUI {
 
 		while (running) {
 			System.out.print("Enter a command (add, sub, mul, div) or 'exit' to quit: ");
-			String command = scanner.nextLine().trim();
+			String command = readInputLine();
 
 			switch (command) {
 			case "add":
@@ -79,11 +77,17 @@ public class CalculatorUI {
 
 	BigDecimal readNumber(String message) {
 		System.out.print(message);
-		String input = scanner.nextLine().trim();
+		String input = readInputLine();
 		return new BigDecimal(input);
 	}
 
 	void displayResult(BigDecimal result) {
 		System.out.println("Result: " + result);
+	}
+	
+	String readInputLine() {
+		try (Scanner scanner = new Scanner(System.in)) {
+			return scanner.nextLine().trim();
+		}
 	}
 }
