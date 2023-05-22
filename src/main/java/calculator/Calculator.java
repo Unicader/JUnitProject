@@ -1,24 +1,26 @@
 package calculator;
 
+import java.math.BigDecimal;
+
 public class Calculator {
 
-	double add(double a, double b) {
-		return a + b;
+	BigDecimal add(BigDecimal a, BigDecimal b) {
+		return a.add(b);
 	}
 
-	double sub(double a, double b) {
-		return a - b;
+	BigDecimal sub(BigDecimal a, BigDecimal b) {
+		return a.subtract(b);
 	}
 
-	double mul(double a, double b) { 
-		return a * b;
+	BigDecimal mul(BigDecimal a, BigDecimal b) { 
+		return a.multiply(b);
 	}
 
-	double div(double dividend, double divisor) {
-		if (divisor == 0) {
+	BigDecimal div(BigDecimal dividend, BigDecimal divisor) {
+		if (divisor.equals(BigDecimal.ZERO)) {
 			throw new IllegalArgumentException("Divisor cannot be zero");
 		}
-		return dividend / divisor;
+		return dividend.divide(divisor);
 	}
 
 }
