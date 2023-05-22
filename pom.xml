@@ -3,14 +3,15 @@
 	<groupId>JUnitProject</groupId>
 	<artifactId>JUnitProject</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-
 	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.version>3.8.1</maven.compiler.version>
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
 		<junit.jupiter.version>5.9.3</junit.jupiter.version>
 		<mockito.version>5.3.1</mockito.version>
+		<surefire.version>3.1.0</surefire.version>
 	</properties>
-
 	<dependencies>
 		<!-- JUnit 5 dependencies -->
 		<dependency>
@@ -31,8 +32,6 @@
 			<version>${junit.jupiter.version}</version>
 			<scope>test</scope>
 		</dependency>
-
-
 		<!-- Mockito dependency -->
 		<dependency>
 			<groupId>org.mockito</groupId>
@@ -41,17 +40,29 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.1</version>
+				<version>${maven.compiler.version}</version>
 				<configuration>
 					<source>${maven.compiler.source}</source>
 					<target>${maven.compiler.target}</target>
 				</configuration>
+			</plugin>
+			<!-- To run JUnit tests on build -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${surefire.version}</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.junit.jupiter</groupId>
+						<artifactId>junit-jupiter-engine</artifactId>
+						<version>${junit.jupiter.version}</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 		</plugins>
 	</build>

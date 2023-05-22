@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.shadow.com.univocity.parsers.csv.CsvFormat;
 
 class CalculatorTest {
 	Calculator calculator;
@@ -51,6 +50,7 @@ class CalculatorTest {
 			"6,-3,-2", // positive and negative number
 			"-4,-8,0.5", // two negative numbers
 			"3.9,1.3,3", // two doubles
+			"1.123,2.1223,0.529142911", // division that would throws ArithmeticException: no exact representable decimal result.
 	})
 	void allPosibilitiesDiv(BigDecimal a, BigDecimal b, BigDecimal expectedResult) {
 		BigDecimal result = calculator.div(a, b);
