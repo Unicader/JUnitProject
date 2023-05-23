@@ -37,7 +37,7 @@ public class CalculatorUI {
 				running = false;
 				break;
 			default:
-				System.err.println("Invalid command. Please try again.");
+				System.out.println("Invalid command. Please try again.");
 				break;
 			}
 		}
@@ -46,27 +46,27 @@ public class CalculatorUI {
 	}
 
 	BigDecimal performAddition() {
-		BigDecimal a = readNumber("Enter the first addend: ");
-		BigDecimal b = readNumber("Enter the second addend: ");
+		BigDecimal a = readNumber("Enter the first addend:");
+		BigDecimal b = readNumber("Enter the second addend:");
 		return calculator.add(a, b);
 	}
 
 	BigDecimal performSubtraction() {
-		BigDecimal a = readNumber("Enter the minuend: ");
-		BigDecimal b = readNumber("Enter the subtrahend: ");
+		BigDecimal a = readNumber("Enter the minuend:");
+		BigDecimal b = readNumber("Enter the subtrahend:");
 		return calculator.sub(a, b);
 	}
 
 	BigDecimal performMultiplication() {
-		BigDecimal a = readNumber("Enter the first factor: ");
-		BigDecimal b = readNumber("Enter the second factor: ");
+		BigDecimal a = readNumber("Enter the first factor:");
+		BigDecimal b = readNumber("Enter the second factor:");
 		return calculator.mul(a, b);
 	}
 
 	BigDecimal performDivision() {
-		BigDecimal dividend = readNumber("Enter the dividend: ");
+		BigDecimal dividend = readNumber("Enter the dividend:");
 		while (true) {
-			BigDecimal divisor = readNumber("Enter the divisor: ");
+			BigDecimal divisor = readNumber("Enter the divisor:");
 			try {
 				return calculator.div(dividend, divisor);
 			} catch (IllegalArgumentException e) {
@@ -82,7 +82,7 @@ public class CalculatorUI {
 			try {
 				return new BigDecimal(input);
 			} catch (NumberFormatException e) {
-				System.err.println("Not a number!\n");
+				System.out.println("Not a number!\n");
 			}
 		}
 	}
