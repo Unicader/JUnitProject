@@ -122,5 +122,6 @@ class CalculatorTest {
 		// Assert
 		assertEquals(expectedResult, result);
 	}
-	
+
+
 }

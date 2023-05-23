@@ -94,7 +94,7 @@ class CalculatorUITest {
 		String consoleOutput = outputStream.toString().trim();
 		assertEquals("Result: 10.5", consoleOutput);
 	}
-	
+
 	private void mockingReadNumbers(String first, int firstValue, String second, int secondValue) {
 		Mockito.doReturn(BigDecimal.valueOf(firstValue)).when(calculatorUI).readNumber(first);
 		Mockito.doReturn(BigDecimal.valueOf(secondValue)).when(calculatorUI).readNumber(second);
