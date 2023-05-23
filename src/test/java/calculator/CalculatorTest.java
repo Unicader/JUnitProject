@@ -1,9 +1,28 @@
 package calculator;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
+import static org.junit.jupiter.api.Assertions.assertLinesMatch;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
+import static org.junit.jupiter.api.Assertions.assertTimeout;
+import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.assertArg;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,7 +42,9 @@ class CalculatorTest {
 
 	@Test
 	void onePlusOneIsTwo() {
+		// Act
 		BigDecimal result = calculator.add(BigDecimal.ONE, BigDecimal.ONE);
+		// Assert
 		assertEquals(BigDecimal.valueOf(2), result);
 	}
 
@@ -31,16 +52,16 @@ class CalculatorTest {
 	@DisplayName("1 - 1 = 0")
 	@Test
 	void oneMinusOneIsZero() {
+		// Act
 		BigDecimal result = calculator.sub(BigDecimal.ONE, BigDecimal.ONE);
+		// Assert
 		assertEquals(BigDecimal.ZERO, result);
 	}
 
 	@Tag("div")
 	@Test
 	void divisorZeroThrowsException() {
-		assertThrows(IllegalArgumentException.class, () -> {
-			calculator.div(BigDecimal.valueOf(10), BigDecimal.ZERO);
-		});
+		assertThrows(IllegalArgumentException.class, () -> calculator.div(BigDecimal.valueOf(10), BigDecimal.ZERO));
 	}
 
 	@Tag("div")
@@ -50,10 +71,13 @@ class CalculatorTest {
 			"6,-3,-2", // positive and negative number
 			"-4,-8,0.5", // two negative numbers
 			"3.9,1.3,3", // two doubles
-			"1.123,2.1223,0.529142911", // division that would throws ArithmeticException: no exact representable decimal result.
+			"1.123,2.1223,0.529142911", // division that would throws ArithmeticException: no exact representable
+										// decimal result.
 	})
 	void allPosibilitiesDiv(BigDecimal a, BigDecimal b, BigDecimal expectedResult) {
+		// Act
 		BigDecimal result = calculator.div(a, b);
+		// Assert
 		assertEquals(expectedResult, result);
 	}
 
@@ -63,7 +87,9 @@ class CalculatorTest {
 	@ParameterizedTest(name = "{0} + {1} = {2}")
 	@CsvFileSource(resources = "/testDataAdd.csv")
 	void allPosibilitiesAdd(BigDecimal a, BigDecimal b, BigDecimal expectedResult) {
+		// Act
 		BigDecimal result = calculator.add(a, b);
+		// Assert
 		assertEquals(expectedResult, result);
 	}
 
@@ -76,7 +102,9 @@ class CalculatorTest {
 			"3.9,1.3,2.6", // two doubles
 	})
 	void allPosibilitiesSub(BigDecimal a, BigDecimal b, BigDecimal expectedResult) {
+		// Act
 		BigDecimal result = calculator.sub(a, b);
+		// Assert
 		assertEquals(expectedResult, result);
 	}
 
@@ -89,7 +117,10 @@ class CalculatorTest {
 			"3.9,1.3,5.07", // two doubles
 	})
 	void allPosibilitiesMul(BigDecimal a, BigDecimal b, BigDecimal expectedResult) {
+		// Act
 		BigDecimal result = calculator.mul(a, b);
+		// Assert
 		assertEquals(expectedResult, result);
 	}
+	
 }

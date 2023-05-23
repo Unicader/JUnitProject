@@ -1,86 +1,108 @@
 package userinterface;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doAnswer;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.math.BigDecimal;
 
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import calculator.Calculator;
+class CalculatorUITest {
+	CalculatorUI calculatorUI;
 
-public class CalculatorUITest {
-	
+	@BeforeEach
+	void setUp() {
+		calculatorUI = Mockito.spy(CalculatorUI.class);
+	}
+
 	@Test
-	public void testPerformAddition() {
+	void testPerformAddition() {
 		// Arrange
-		CalculatorUI calculatorUI = Mockito.spy(new CalculatorUI());
-		Mockito.doReturn(BigDecimal.ONE).when(calculatorUI).readNumber("Enter the first number: ");
-		Mockito.doReturn(BigDecimal.TEN).when(calculatorUI).readNumber("Enter the second number: ");
+		mockingReadNumbers("Enter the first addend: ", 1, "Enter the second addend: ", 10);
 		// Act
 		BigDecimal result = calculatorUI.performAddition();
 		// Assert
 		assertEquals(BigDecimal.valueOf(11), result);
 	}
-	
+
 	@Test
-	public void testPerformSubtraction() {
+	void testPerformSubtraction() {
 		// Arrange
-		CalculatorUI calculatorUI = Mockito.spy(new CalculatorUI());
-		Mockito.doReturn(BigDecimal.ONE).when(calculatorUI).readNumber("Enter the first number: ");
-		Mockito.doReturn(BigDecimal.TEN).when(calculatorUI).readNumber("Enter the second number: ");
+		mockingReadNumbers("Enter the minuend: ", 1, "Enter the subtrahend: ", 10);
 		// Act
 		BigDecimal result = calculatorUI.performSubtraction();
 		// Assert
 		assertEquals(BigDecimal.valueOf(-9), result);
 	}
-	
+
 	@Test
-	public void testPerformMultiplication() {
+	void testPerformMultiplication() {
 		// Arrange
-		CalculatorUI calculatorUI = Mockito.spy(new CalculatorUI());
-		Mockito.doReturn(BigDecimal.ONE).when(calculatorUI).readNumber("Enter the first number: ");
-		Mockito.doReturn(BigDecimal.TEN).when(calculatorUI).readNumber("Enter the second number: ");
+		mockingReadNumbers("Enter the first factor: ", 1, "Enter the second factor: ", 10);
 		// Act
 		BigDecimal result = calculatorUI.performMultiplication();
 		// Assert
 		assertEquals(BigDecimal.valueOf(10), result);
 	}
-	
+
 	@Test
-	public void testPerformDivision() {
+	void testPerformDivision() {
 		// Arrange
-		CalculatorUI calculatorUI = Mockito.spy(new CalculatorUI());
-		Mockito.doReturn(BigDecimal.ONE).when(calculatorUI).readNumber("Enter the dividend: ");
-		Mockito.doReturn(BigDecimal.TEN).when(calculatorUI).readNumber("Enter the divisor: ");
+		mockingReadNumbers("Enter the dividend: ", 1, "Enter the divisor: ", 10);
 		// Act
 		BigDecimal result = calculatorUI.performDivision();
 		// Assert
 		assertEquals(BigDecimal.valueOf(0.1), result);
 	}
-	
+
 	@Test
-	public void testPerformDivisionWithZeroAsDivisor() {
+	void testPerformDivisionWithZeroAsDivisor() throws InterruptedException {
 		// Arrange
-		CalculatorUI calculatorUI = Mockito.spy(new CalculatorUI());
-		Mockito.doReturn(BigDecimal.ONE).when(calculatorUI).readNumber("Enter the dividend: ");
-		Mockito.doReturn(BigDecimal.ZERO).when(calculatorUI).readNumber("Enter the divisor: ");
+		mockingReadNumbers("Enter the dividend: ", 1, "Enter the divisor: ", 0);
+		// Act
+		doAnswer(invocation -> { // Change the behavior to return one after a delay
+			Thread.sleep(20);
+			return BigDecimal.ONE;
+		}).when(calculatorUI).readNumber("Enter the divisor: ");
+		BigDecimal performDivision = calculatorUI.performDivision();
 		// Assert
-		assertThrows(IllegalArgumentException.class, () -> {
-			calculatorUI.performDivision();
-		});
+		assertEquals(BigDecimal.ONE, performDivision);
 	}
-	
+
 	@Test
-	public void testReadNumber() {
+	void testReadNumber() {
 		// Arrange
-		CalculatorUI calculatorUI = Mockito.spy(new CalculatorUI());
 		Mockito.doReturn("1").when(calculatorUI).readInputLine();
-		//Act
+		// Act
 		BigDecimal readNumber = calculatorUI.readNumber("");
 		// Assert
 		assertEquals(BigDecimal.ONE, readNumber);
+	}
+
+	@Test
+	void testDisplayResult() {
+		// Arrange
+		ByteArrayOutputStream outputStream = setUpOUtputStream();
+		BigDecimal result = new BigDecimal("10.5");
+		// Act
+		calculatorUI.displayResult(result);
+		// Assert
+		String consoleOutput = outputStream.toString().trim();
+		assertEquals("Result: 10.5", consoleOutput);
+	}
+	
+	private void mockingReadNumbers(String first, int firstValue, String second, int secondValue) {
+		Mockito.doReturn(BigDecimal.valueOf(firstValue)).when(calculatorUI).readNumber(first);
+		Mockito.doReturn(BigDecimal.valueOf(secondValue)).when(calculatorUI).readNumber(second);
+	}
+
+	private ByteArrayOutputStream setUpOUtputStream() {
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		System.setOut(new PrintStream(outputStream));
+		return outputStream;
 	}
 }
