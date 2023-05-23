@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 class CalculatorUITest {
+
 	CalculatorUI calculatorUI;
 
 	@BeforeEach
@@ -86,7 +87,7 @@ class CalculatorUITest {
 	@Test
 	void testDisplayResult() {
 		// Arrange
-		ByteArrayOutputStream outputStream = setUpOUtputStream();
+		ByteArrayOutputStream outputStream = setUpOutputStream();
 		BigDecimal result = new BigDecimal("10.5");
 		// Act
 		calculatorUI.displayResult(result);
@@ -100,7 +101,7 @@ class CalculatorUITest {
 		Mockito.doReturn(BigDecimal.valueOf(secondValue)).when(calculatorUI).readNumber(second);
 	}
 
-	private ByteArrayOutputStream setUpOUtputStream() {
+	private ByteArrayOutputStream setUpOutputStream() {
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		System.setOut(new PrintStream(outputStream));
 		return outputStream;
