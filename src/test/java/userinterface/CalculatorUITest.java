@@ -69,7 +69,7 @@ class CalculatorUITest {
 		mockingReadNumbers("Enter the dividend:", 1, "Enter the divisor:", 0);
 		// Act
 		doAnswer(invocation -> { // Change the behavior to return one after a delay
-			Thread.sleep(20);
+			Thread.sleep(40);
 			return BigDecimal.ONE;
 		}).when(calculatorUI).readNumber("Enter the divisor:");
 		BigDecimal performDivision = calculatorUI.performDivision();
@@ -78,9 +78,27 @@ class CalculatorUITest {
 	}
 
 	@Test
-	void testReadNumber() {
+	void testReadNumberWithNumber() {
 		// Arrange
 		Mockito.doReturn("1").when(calculatorUI).readInputLine();
+		// Act
+		BigDecimal readNumber = calculatorUI.readNumber("");
+		// Assert
+		assertEquals(BigDecimal.ONE, readNumber);
+	}
+	
+	@Test
+	void testReadNumberWithInvalidNumber() {
+		// Arrange
+		ByteArrayOutputStream outputStream = setUpOutputStream();
+		Mockito.doReturn("number").when(calculatorUI).readInputLine();
+		Mockito.doAnswer(invocation -> {
+			if (invocation.getMethod().getName().equals("readInputLine")
+					&& outputStream.toString().contains("Not a number!")) {
+				return "1";
+			}
+			return "number";
+		}).when(calculatorUI).readInputLine();
 		// Act
 		BigDecimal readNumber = calculatorUI.readNumber("");
 		// Assert
@@ -151,7 +169,6 @@ class CalculatorUITest {
 					&& outputStream.toString().contains("Invalid command. Please try again.")) {
 				return "exit";
 			}
-			// For other cases, delegate to the given parameter
 			return "comand";
 		}).when(calculatorUI).readInputLine();
 		// Act
