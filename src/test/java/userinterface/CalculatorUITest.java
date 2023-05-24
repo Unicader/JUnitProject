@@ -2,7 +2,6 @@ package userinterface;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.doAnswer;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -66,12 +65,15 @@ class CalculatorUITest {
 	@Test
 	void testPerformDivisionWithZeroAsDivisor() throws InterruptedException {
 		// Arrange
-		mockingReadNumbers("Enter the dividend:", 1, "Enter the divisor:", 0);
+		ByteArrayOutputStream outputStream = setUpOutputStream();
+		Mockito.doReturn(BigDecimal.valueOf(1)).when(calculatorUI).readNumber("Enter the dividend:");
+		Mockito.doAnswer(invocation -> {
+	        if (outputStream.toString().contains("Divisor cant be zero!")) {
+	            return "1";
+	        }
+	        return "0";
+	    }).when(calculatorUI).readInputLine();
 		// Act
-		doAnswer(invocation -> { // Change the behavior to return one after a delay
-			Thread.sleep(40);
-			return BigDecimal.ONE;
-		}).when(calculatorUI).readNumber("Enter the divisor:");
 		BigDecimal performDivision = calculatorUI.performDivision();
 		// Assert
 		assertEquals(BigDecimal.ONE, performDivision);
@@ -91,7 +93,6 @@ class CalculatorUITest {
 	void testReadNumberWithInvalidNumber() {
 		// Arrange
 		ByteArrayOutputStream outputStream = setUpOutputStream();
-		Mockito.doReturn("number").when(calculatorUI).readInputLine();
 		Mockito.doAnswer(invocation -> {
 			if (invocation.getMethod().getName().equals("readInputLine")
 					&& outputStream.toString().contains("Not a number!")) {
@@ -103,6 +104,7 @@ class CalculatorUITest {
 		BigDecimal readNumber = calculatorUI.readNumber("");
 		// Assert
 		assertEquals(BigDecimal.ONE, readNumber);
+		assertTrue(outputStream.toString().contains("Not a number!"));
 	}
 
 	@Test
@@ -117,26 +119,23 @@ class CalculatorUITest {
 		assertEquals("Result: 10.5", consoleOutput);
 	}
 
-	@ParameterizedTest(name = "{0} {2} and {4} results {5}")
+	@ParameterizedTest(name = "{0} {2} and {4} is {5}")
 	@CsvSource({ //
 			"add, Enter the first addend:, 1,   Enter the second addend:, 10, 11", //
 			"sub, Enter the minuend:,      1,   Enter the subtrahend:,    10, -9", //
 			"mul, Enter the first factor:, 1,   Enter the second factor:, 10, 10", //
-			"div, Enter the dividend:,     10, Enter the divisor:,        10, 1", //
+			"div, Enter the dividend:,     10,  Enter the divisor:,       10, 1", //
 	})
 	void testRunProgramAndThenExit(String command, String firstText, int firstNumber, String secondText,
 			int secondNumber, int result) {
 		// Arrange
 		ByteArrayOutputStream outputStream = setUpOutputStream();
 		mockingReadNumbers(firstText, firstNumber, secondText, secondNumber);
-		// Create a mock Answer to change the behavior of readInputLine() during runProgram()
 		Mockito.doAnswer(invocation -> {
-			// Check if the "exit" command is requested, then return it
 			if (invocation.getMethod().getName().equals("readInputLine")
 					&& outputStream.toString().contains("Result: " + result)) {
 				return "exit";
 			}
-			// For other cases, delegate to the given parameter
 			return command;
 		}).when(calculatorUI).readInputLine();
 		// Act
@@ -164,7 +163,6 @@ class CalculatorUITest {
 		// Arrange
 		ByteArrayOutputStream outputStream = setUpOutputStream();
 		Mockito.doAnswer(invocation -> {
-			// Check if the "exit" command is requested, then return it
 			if (invocation.getMethod().getName().equals("readInputLine")
 					&& outputStream.toString().contains("Invalid command. Please try again.")) {
 				return "exit";

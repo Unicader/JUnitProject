@@ -70,7 +70,7 @@ public class CalculatorUI {
 			try {
 				return calculator.div(dividend, divisor);
 			} catch (IllegalArgumentException e) {
-				System.err.println("Divisor cant be zero!\n");
+				System.out.println("Divisor cant be zero!\n");
 			}
 		}
 	}
